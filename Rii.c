@@ -6,7 +6,8 @@
 
 int main()
 {
-	unsigned int n,m = 0;
+	unsigned int n = 0;
+	unsigned int m = 0;
 	int c = 0;
 	char edge[50] = {0};
 	int i = 0;
@@ -14,11 +15,12 @@ int main()
 	{
 		++i;
 		c = 0;
-		if(i == 1000) printf("se queda en el while");
 		c = fgetc(stdin);
-		if(c == EOF)
-			printf("no anda el fgetc");;
-
+		if((char)c == 'p' )
+		{	
+			printf("entró en el if \n");
+			break;
+		}
 		// int len = strlen(line);
 
 		// while (len > 0 && (line[len-1] == '\n' || line[len-1] == '\r'))
@@ -39,6 +41,7 @@ int main()
 	scanf("%s\n",edge);
 	scanf("%d\n",&n);
 	scanf("%d\n",&m);
+	printf("%s\n",edge);
 	printf("el valor de n es:%d\n", n);
 	printf("el valor de m es:%d\n", m);
 	//como crear un string char por char ó scanf los numeros n y m en el string line(ver mejor opción)
