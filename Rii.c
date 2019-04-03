@@ -3,6 +3,15 @@
 #include <stdbool.h>
 #include <assert.h>
 
+typedef unsigned int u32; 
+
+struct vertex
+{
+	u32 name;
+	u32 color; //Structure type declarations do not support initializers
+	u32 grade;
+	u32 a_pos; //position in neighbour array
+};
 
 int main()
 {
@@ -21,11 +30,9 @@ int main()
 			break;
 		}
 	}
-	scanf("%s\n",edge);
-	scanf("%d\n",&n);
-	scanf("%d\n",&m);
-	printf("%s\n",edge);
+	scanf("%s",edge);// %s\n breaks my inputs
+	scanf("%d",&n);
+	scanf("%d",&m);
 	printf("el valor de n es: %d\n", n);
 	printf("el valor de m es: %d\n", m);
-
 }
