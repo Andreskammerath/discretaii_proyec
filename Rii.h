@@ -17,6 +17,7 @@ typedef struct Grafost
 	u32* visitados;
 	u32 m; //number of edges
 	u32 n; // number of vertex
+	u32 max; // number of vert
 	u32* indEnVecinos;
 } Grafostv;
 

@@ -98,7 +98,37 @@ void copiarAVertice(u32* vertices, u32* vecinos, u32* grados, u32* orden, u32* i
 
 u32 Greedy(Grafostv* G)
 {
-
+    u32 max_color = 0;
+    u32 nVer = G->n;
+    u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
+  G->color[indice] = 0;
+  G->visitados[indice] = 1;
+    u32 indice2 = 0; 
+  for (u32 i = 1; i < nVer; ++i)
+  {
+    indice = binarySearch(G->vertices,0,nVer-1,G->orden[i]);
+    G->visitados[indice] = 1;
+    u32 color = 0;
+    u32 rompelo = 0;
+    u32 flag = 1;
+    while(flag)
+    {
+        rompelo = 0;
+        for (u32 i = 0; i < G->grados[indice]; ++i)
+        {
+            indice2 = binarySearch(G->vertices,0,nVer-1,G->vecinos[1][G->indEnVecinos[indice]+i]);
+                if(G->color[indice2] == color && G->visitados[indice2]) color++;
+                else
+                {
+                    rompelo++;
+                    if(rompelo == G->grados[indice]) flag = 0;
+                }
+        }
+    }
+    G->color[indice] = color;
+    if(color > max_color) max_color = color;
+  }
+  return max_color;
 }
 
 Grafostv* ConstruccionDelGrafo()
@@ -153,29 +183,31 @@ Grafostv* ConstruccionDelGrafo()
   } 
   quick_sort(G->vecinos[0], 0, 2*m-1, G->vecinos[1]);
   G->vertices[0] = G->vecinos[0][0];
-  copiarAVertice(G->vertices,G->vecinos[0],G->grados, G->orden, G->indEnVecinos, 2*m); 
-  // Greedy(G);
+  copiarAVertice(G->vertices,G->vecinos[0],G->grados, G->orden, G->indEnVecinos, 2*m);
+  memset(G->visitados,0,n*sizeof(u32));
+  memcpy(G->orden,G->vertices,n*sizeof(u32)); 
+  G->max = Greedy(G);
   return G;
 }
 int main()
 {
   // begin of create graph
-  Grafostv* ptr = ConstruccionDelGrafo();
+  Grafostv* G = ConstruccionDelGrafo();
   // u32 color = Greedy(ptr);
   //u32 m = ptr->m;
   // for (int j = 0; j < 2*m; ++j)
   // {
   //  printf("%u ------ %u\n",ptr->vecinos[0][j], ptr->vecinos[1][j] );
   // }
-  u32 n = ptr->n;
-  // for (int i = 0; i < n; ++i)
-  // {
-  //   printf("el grado es:%u ", ptr->grados[i]);
-  //   printf("el vertice es:%u ", ptr->vertices[i]);
-  //   printf("el indEnVecino es:%u ", ptr->indEnVecinos[i]);
-  //   printf("la posición es:%u\n", ptr->orden[i]);
-  // }
-  u32 x = binarySearch(ptr->vertices,0,n-1,7);
-  printf("%u\n", x);
+  u32 n = G->n;
+  for (int i = 0; i < n; ++i)
+  {
+    // printf("%u\n", G->indEnVecinos[i]);
+    printf("el vertice es:%u ", G->vertices[i]);
+    // printf("el indEnVecino es:%u ", ptr->indEnVecinos[i]);
+    printf("el color es:%u \n", G->color[i]);
+  }
+  printf("el color máximo es: %u\n",G->max);
+  // u32 x = binarySearch(ptr->vertices,0,n-1,7);
   return 0;
 }
