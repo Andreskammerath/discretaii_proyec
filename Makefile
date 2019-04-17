@@ -1,7 +1,7 @@
 CC = gcc
-CCFLAGS =  -g -Wextra -Wall -O3 -std=c99
+CCFLAGS = -g -Wextra -Wall -O3 -std=c99
 TARGET = exe
-SOURCES = Rii.c
+SOURCES = Rii.c infoVerAri.c
 OBJS = $(SOURCES:.c=.o)
 
 all: $(TARGET)
