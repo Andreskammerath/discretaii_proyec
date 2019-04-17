@@ -155,6 +155,22 @@ Grafostv* ConstruccionDelGrafo()
 	return G;
 }
 
+void DestruccionDelGrafo (Grafostv* G){
+    u32 m = G->m;
+    for (u32 i = 0; i < 2*m; i++) {
+        free (G->vecinos[i]);
+    }
+    free(G->color);
+    free(G->grados);
+    free(G->orden);
+    free(G->indEnVecinos);
+	free(G->vecinos);
+	free(G->vertices);
+    free(G->visitados);
+    free(G);
+    G = NULL;
+}
+
 int main()
 {
 	// begin of create graph
@@ -165,15 +181,40 @@ int main()
 	// {
 	//  printf("%u ------ %u\n",ptr->vecinos[0][j], ptr->vecinos[1][j] );
 	// }
-	u32 n = G->n;
-	for (u32 i = 0; i < n; ++i)
-	{
+	//u32 n = G->n;
+	//for (u32 i = 0; i < n; ++i)
+	//{
 		// printf("%u\n", G->indEnVecinos[i]);
-		printf("el vertice es:%u ", G->vertices[i]);
+		//printf("el vertice es:%u ", G->vertices[i]);
 		// printf("el indEnVecino es:%u ", ptr->indEnVecinos[i]);
-		printf("el color es:%u \n", G->color[i]);
-	}
+		//printf("el color es:%u \n", G->color[i]);
+	//}
 	printf("el color máximo es: %u\n",G->max);
 	// u32 x = binarySearch(ptr->vertices,0,n-1,7);
+	DestruccionDelGrafo(G);
 	return 0;
+}
+
+u32 NumeroDeVertices (Grafostv* G){
+    return G->n;
+}
+
+u32 NumeroDeLados (Grafostv* G){
+    return G->m;
+}
+
+u32 NumeroDeColores (Grafostv* G){
+    return G->color; //DUDAAAAAAAAAAAA
+}
+
+u32 NombreDelVertice (Grafostv* G, u32 i){
+    return G->vertices[i];
+}
+
+u32 ColorDelVertice (Grafostv* G, u32 i){
+    return G->color[i];
+}
+
+u32 GradoDelVertice (Grafostv* G, u32 i){
+    return G->grado[i];
 }
