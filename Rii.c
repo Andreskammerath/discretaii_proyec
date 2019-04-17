@@ -63,39 +63,53 @@ u32 Greedy(Grafostv* G)
     u32** aux = G->vecinos; 
     u32 max_color = 0;
     u32 nVer = G->n;
+    u32* color_vecinos = (u32*)malloc(sizeof(u32) * G->n);
+    memset(color_vecinos,0,G->n*sizeof(u32));
     u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
   G->color[indice] = 0;
   G->visitados[indice] = 1;
-    u32 indice2 = 0; 
+    u32 indice2 = 0;
+    u32 reset_color = 0; //para resetear el arreglo color_vecinos
   for (u32 i = 1; i < nVer; ++i)
   {
     indice = binarySearch(G->vertices,0,nVer-1,G->orden[i]);
     G->visitados[indice] = 1;
     u32 color = 0;
-    u32 rompelo = 0;
-    u32 flag = 1;
-    while(flag)
+    reset_color = 0;
+    for (u32 j = 0; j < G->grados[indice]; ++j)
     {
-        rompelo = 0;
-        for (u32 i = 0; i < G->grados[indice]; ++i)
+        indice2 = binarySearch(G->vertices,0,nVer-1,aux[G->indEnVecinos[indice]+j][1]);
+        if(G->visitados[indice2])
         {
-            indice2 = binarySearch(G->vertices,0,nVer-1,aux[G->indEnVecinos[indice]+i][1]);
-                if(G->color[indice2] == color && G->visitados[indice2]) color++;
-                else
-                {
-                    rompelo++;
-                    if(rompelo == G->grados[indice])
-                    {
-                        flag = 0;
-                    } 
-                }
+            color_vecinos[G->color[indice2]] = 1;
+            if(G->color[indice2] > reset_color)
+            {
+                reset_color = G->color[indice2];
+            }
+        }
+    }
+    for (u32 j = 0; j < G->n; ++j)
+    {
+        if(!color_vecinos[j])
+        {
+            color = j;
+            break;
         }
     }
     G->color[indice] = color;
-    if(color > max_color) max_color = color;
+    if(color > max_color) 
+    {
+        max_color = color;
+    }
+    if(color > reset_color)
+    {
+     reset_color = color;
+     // printf("reset_color = %u\n", reset_color);
+    }
+    memset(color_vecinos,0,G->n*sizeof(u32));
   }
+  free(color_vecinos);
   return max_color + 1;
-  printf("terminé Greedy\n");
 }
 
 Grafostv* ConstruccionDelGrafo()
@@ -178,7 +192,7 @@ int main()
   // //   // printf("el indEnVecino es:%u ", G->indEnVecinos[i]);
   //   printf("el color del vertice %u es:%u  \n", G->vertices[i], G->color[i]);
   // }
-    printf("el numero de colores es: %u\n",G->max);
+  printf("el numero de colores es: %u\n",G->max);
   // u32 x = binarySearch(ptr->vertices,0,n-1,7);
   return 0;
 }
