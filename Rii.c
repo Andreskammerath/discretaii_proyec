@@ -7,7 +7,7 @@ u32 binarySearch(u32* arr, u32 l, u32 r, u32 x)
 
       // If the element is present at the middle 
       // itself 
-    if (arr[mid] == x) 
+    if (arr[mid]  == x) 
       return mid; 
 
       // If element is smaller than mid, then 
@@ -25,53 +25,6 @@ u32 binarySearch(u32* arr, u32 l, u32 r, u32 x)
   return 0; 
 }
 
-// void cambiar(u32* array, u32* array2, u32* array3, u32* array4)
-// {
-//   u32* a = array;
-//   u32* b = array2;
-//   u32 tmp = *array2; 
-//   *b = *a;
-//   *a = tmp;
-//   a = array3;
-//   b = array4;
-//   tmp = *array4; 
-//   *b = *a;
-//   *a = tmp;
-// }
-// void quick_sort(u32* array, u32 com, u32 fin, u32* array3)
-// {
-//   // Base case: No need to sort arrays of length <= 1
-//   if (com >= fin)
-//   {
-//       return;
-//   }
-//   // Choose pivot to be the last element in the subarray
-//   u32 pivot = array[fin];
-
-//   // Index indicating the "split" between elements smaller than pivot and 
-//   // elements greater than pivot
-//   u32 cnt = com;
-
-//   // Traverse through array from l to r
-//   for (u32 i = com; i <= fin; i++)
-//   {
-//       // If an element less than or equal to the pivot is found...
-//       if (array[i] <= pivot)
-//       {
-//           // Then swap arr[cnt] and arr[i] so that the smaller element arr[i] 
-//           // is to the left of all elements greater than pivot
-//           cambiar(&array[cnt], &array[i], &array3[cnt], &array3[i]);
-
-//           // Make sure to increment cnt so we can keep track of what to swap
-//           // arr[i] with
-//           cnt++;
-//       }
-//   }
-//   // NOTE: cnt is currently at one plus the pivot's index 
-//   // (Hence, the cnt-2 when recursively sorting the left side of pivot)
-//   quick_sort(array, com, cnt-2, array3); // Recursively sort the left side of pivot
-//   quick_sort(array, cnt, fin, array3);   // Recursively sort the right side of pivot
-// }
 int compare ( const void *pa, const void *pb ) {
     const u32 *a = *(const u32 **)pa;
     const u32 *b = *(const u32 **)pb;
@@ -81,13 +34,14 @@ int compare ( const void *pa, const void *pb ) {
         return a[0] - b[0];
 }
 
-void copiarAVertice(u32* vertices, u32* vecinos, u32* grados, u32* orden, u32* indEnVecinos, u32 m)
+void copiarAVertice(u32* vertices, u32** vecinos1, u32* grados, u32* indEnVecinos, u32 m)
 {
+    u32** aux = vecinos1;
   u32 j = 0;
   u32 grado = 0;
   for (u32 i = 0; i < m; ++i)
   {
-    if(vecinos[i] == vertices[j])
+    if(aux[i][0] == vertices[j])
     {
       grado++;
     }
@@ -96,16 +50,17 @@ void copiarAVertice(u32* vertices, u32* vecinos, u32* grados, u32* orden, u32* i
       grados[j] = grado;
       ++j;
       indEnVecinos[j] = i;
-      vertices[j] = vecinos[i];
+      vertices[j] = aux[i][0];
       grado = 1;
-      orden[j] = j;
     }
   }
   grados[j] = grado;
+  printf("terminé copiarAVertice\n");
 }
 
 u32 Greedy(Grafostv* G)
 {
+    u32** aux = G->vecinos; 
     u32 max_color = 0;
     u32 nVer = G->n;
     u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
@@ -124,7 +79,7 @@ u32 Greedy(Grafostv* G)
         rompelo = 0;
         for (u32 i = 0; i < G->grados[indice]; ++i)
         {
-            indice2 = binarySearch(G->vertices,0,nVer-1,G->vecinos[1][G->indEnVecinos[indice]+i]);
+            indice2 = binarySearch(G->vertices,0,nVer-1,aux[G->indEnVecinos[indice]+i][1]);
                 if(G->color[indice2] == color && G->visitados[indice2]) color++;
                 else
                 {
@@ -132,16 +87,15 @@ u32 Greedy(Grafostv* G)
                     if(rompelo == G->grados[indice])
                     {
                         flag = 0;
-                        printf("cambio la flag\n");
                     } 
                 }
         }
     }
-    printf("salio del while por %u° vez \n", i);
     G->color[indice] = color;
     if(color > max_color) max_color = color;
   }
   return max_color + 1;
+  printf("terminé Greedy\n");
 }
 
 Grafostv* ConstruccionDelGrafo()
@@ -154,6 +108,7 @@ Grafostv* ConstruccionDelGrafo()
   int c = 0; //auxiliar char needed for fgetc function
   char prev = 'a';
   char edge[50] = {0};
+  
   while(true) //module to ignore comments
   {
     prev = (char)c;
@@ -176,6 +131,7 @@ Grafostv* ConstruccionDelGrafo()
   G->vecinos = (u32**)malloc(sizeof(u32*) * 2*m);
   G->vertices = (u32*)malloc(sizeof(u32*) * n);
   G->visitados = (u32*)malloc(sizeof(u32*) * n);
+  
   for (u32 i = 0; i < 2*m; ++i)
   {
     G->vecinos[i] = (u32*)malloc(sizeof(u32)*2);
@@ -195,32 +151,34 @@ Grafostv* ConstruccionDelGrafo()
     G->vecinos[i+1][1] = v;
   } 
   qsort(G->vecinos, 2*m, 2*sizeof(u32), compare);
-  // G->vertices[0] = G->vecinos[0][0];
-  // copiarAVertice(G->vertices,G->vecinos[0],G->grados, G->orden, G->indEnVecinos, 2*m);
-  // memset(G->visitados,0,n*sizeof(u32));
-  // memcpy(G->orden,G->vertices,n*sizeof(u32)); 
-  // G->max = Greedy(G);
+  printf("terminé el qsort\n");
+  G->vertices[0] = G->vecinos[0][0];
+  copiarAVertice(G->vertices,G->vecinos,G->grados, G->indEnVecinos, 2*m);
+  memset(G->visitados,0,n*sizeof(u32));
+  memcpy(G->orden,G->vertices,n*sizeof(u32)); 
+  G->max = Greedy(G);
+  printf("terminé\n");
   return G;
 }
 int main()
 {
   // begin of create graph
   Grafostv* G = ConstruccionDelGrafo();
-  // u32 color = Greedy(ptr);
-  //u32 m = ptr->m;
-  // for (int j = 0; j < 2*m; ++j)
+  // // u32 color = Greedy(ptr);
+  // //u32 m = ptr->m;
+  // // for (int j = 0; j < 2*m; ++j)
+  // // {
+  // //  printf("%u ------ %u\n",ptr->vecinos[0][j], ptr->vecinos[1][j] );
+  // // }
+  // u32 n = G->n;
+  // for (int i = 0; i < n; ++i)
   // {
-  //  printf("%u ------ %u\n",ptr->vecinos[0][j], ptr->vecinos[1][j] );
+  // //   printf("los vertices son:%u\n", G->vertices[i]);
+  // //   // printf("%u ------ %u \n", G->vecinos[i][0],G->vecinos[i][1]);
+  // //   // printf("el indEnVecino es:%u ", G->indEnVecinos[i]);
+  //   printf("el color del vertice %u es:%u  \n", G->vertices[i], G->color[i]);
   // }
-  u32 m = G->m;
-  for (int i = 0; i < 2*m; ++i)
-  {
-    // printf("%u\n", G->indEnVecinos[i]);
-    printf("%u ------ %u \n", G->vecinos[i][0],G->vecinos[i][1]);
-    // printf("el indEnVecino es:%u ", ptr->indEnVecinos[i]);
-    // printf("el color es:%u \n", G->color[i]);
-  }
-  // printf("el color máximo es: %u\n",G->max);
+    printf("el numero de colores es: %u\n",G->max);
   // u32 x = binarySearch(ptr->vertices,0,n-1,7);
   return 0;
 }

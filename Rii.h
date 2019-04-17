@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <time.h>
 #include "vector.h"
 
 typedef unsigned int u32; 
@@ -17,9 +18,10 @@ typedef struct Grafost
 	u32* visitados;
 	u32 m; //number of edges
 	u32 n; // number of vertex
-	u32 max; // number of vert
+	u32 max; // number of colors
 	u32* indEnVecinos;
 } Grafostv;
+
 
 void cambiar(u32* array, u32* array2, u32* array3, u32* array4);
 
