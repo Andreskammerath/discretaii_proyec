@@ -2,15 +2,16 @@
 
 u32 binarySearch(u32* arr, u32 l, u32 r, u32 x) 
 { 
-    if (r >= l) { 
+    if (r >= l) 
+    { 
         u32 mid = l + (r - l) / 2;
         if (arr[mid]  == x) 
             return mid;
         if (arr[mid] > x) 
             return binarySearch(arr, l, mid - 1, x);
     return binarySearch(arr, mid + 1, r, x); 
-  }
-  return 0; 
+    }
+    return 0; 
 }
 
 int compare ( const void *pa, const void *pb ) {
@@ -135,7 +136,7 @@ Grafostv* ConstruccionDelGrafo()
     memset(G->visitados,0,n*sizeof(u32));
     memcpy(G->orden,G->vertices,n*sizeof(u32)); 
     G->max = Greedy(G);
-    printf("terminé\n");
+    printf("terminé Greedy\n");
     return G;
 
 }
@@ -149,15 +150,25 @@ int main()
     //{
     //  printf("%u ------ %u\n",ptr->vecinos[0][j], ptr->vecinos[1][j] );
     //}
-    // u32 n = G->n;
-    // for (int i = 0; i < n; ++i)
-    // {
+    /* 
+     u32 n = G->n;
+     for (u32 i = 0; i < n; ++i)
+     {
         //printf("los vertices son:%u\n", G->vertices[i]);
-        //printf("%u ------ %u \n", G->vecinos[i][0],G->vecinos[i][1]);
+        printf("%u ------ %u \n", G->vecinos[i][0],G->vecinos[i][1]);
         //printf("el indEnVecino es:%u ", G->indEnVecinos[i]);
         //printf("el color del vertice %u es:%u  \n", G->vertices[i], G->color[i]);
-    // }
-    printf("el numero de colores es: %u\n",G->max);
-  // u32 x = binarySearch(ptr->vertices,0,n-1,7);
+     }
+     */
+//G->vecinos[G->indEnVecinos[0]][1]
+
+    printf("Número máximo de colores con Greedy: %u\n",G->max);
+    printf("\n\nEl número de vertices es %u\n", NumeroDeVertices(G));
+    printf("El núumero de lados es %u\n", NumeroDeLados(G));
+    printf("El nombre del vértice es 4 es %u\n", NombreDelVertice(G, 4));
+    printf("El color del vértice 8 es %u\n", ColorDelVertice(G, 8));
+    printf("El grado del vértice 8 es %u\n", GradoDelVertice(G,8));
+    printf("El color del segundo vecino del vértice 2 es %u\n", ColorJotaesimoVecino(G,1,1));
+    printf("El nombre del segundo vecino del vértice 2 es %u\n", NombreJotaesimoVecino(G, 1, 1));
   return 0;
 }

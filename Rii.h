@@ -26,3 +26,23 @@ typedef struct Grafost
 void cambiar(u32* array, u32* array2, u32* array3, u32* array4);
 
 void quick_sort(u32* array, u32 com, u32 fin, u32* array3);
+
+void DestruccionDelGrafo (Grafostv* G);
+
+u32 NumeroDeVertices (Grafostv* G);
+
+u32 NumeroDeLados (Grafostv* G);
+
+//u32 NumeroDeColores (Grafostv* G);
+
+
+//Los nombres van a estar odenados de menor a mayor. 
+u32 NombreDelVertice (Grafostv* G, u32 i);
+
+u32 ColorDelVertice (Grafostv* G, u32 i);
+
+u32 GradoDelVertice (Grafostv* G, u32 i);
+
+u32 ColorJotaesimoVecino(Grafostv * G, u32 i,u32 j);
+
+u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j);
