@@ -22,10 +22,11 @@ typedef struct Grafost
 	u32* indEnVecinos;
 } Grafostv;
 
+int compare ( const void *pa, const void *pb );
 
-void cambiar(u32* array, u32* array2, u32* array3, u32* array4);
+//int comGrado (const void * a, const void * b);
 
-void quick_sort(u32* array, u32 com, u32 fin, u32* array3);
+int comOrdenNat (const void * a, const void * b);
 
 void DestruccionDelGrafo (Grafostv* G);
 
@@ -46,3 +47,9 @@ u32 GradoDelVertice (Grafostv* G, u32 i);
 u32 ColorJotaesimoVecino(Grafostv * G, u32 i,u32 j);
 
 u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j);
+
+char OrdenWelshPowell(Grafostv* G);
+
+char OrdenNatural(Grafostv* G);
+
+char SwitchVertices(Grafostv* G,u32 i,u32 j);

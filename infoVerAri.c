@@ -3,6 +3,35 @@
 #include <stdbool.h>
 #include "Rii.h"
 
+int compare ( const void *pa, const void *pb ) {
+    const u32 *a = *(const u32 **)pa;
+    const u32 *b = *(const u32 **)pb;
+    if(a[0] == b[0])
+        return a[1] - b[1];
+    else
+        return a[0] - b[0];
+}
+
+int comOrdenNat (const void * a, const void * b) //what is it returning?
+{
+   u32 val1 = *(u32*)a;
+   u32 val2 = *(u32*)b;
+   return ( val1 - val2 ); 
+}
+
+/*int compare_vertices(const void *v1, const void *v2) {
+    u32 *vert_degree;
+    u32 degree1 = vert_degree[*(const u32 *)v1 - 1];
+    u32 degree2 = vert_degree[*(const u32 *)v2 - 1];
+    if (degree1 > degree2) {
+        return -1;
+    } else if (degree1 < degree2) {
+        return 1;
+    } else {
+        return 0;
+    }
+}*/
+
 void DestruccionDelGrafo (Grafostv* G)
 {
     u32 m = G->m;
@@ -66,3 +95,35 @@ u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j)
 {
     return NombreDelVertice(G, G->vecinos[G->indEnVecinos[i]+j][1]);
 }
+
+char OrdenNatural(Grafostv* G)
+{
+    qsort(G->orden, G->n, sizeof(u32), comOrdenNat);
+    return 0;
+}
+char SwitchVertices(Grafostv* G, u32 i, u32 j)
+{
+    if (i < NumeroDeVertices(G) || j < NumeroDeVertices(G))
+    {
+        u32 tmp = G->orden[i];
+        G->orden[i] = G->orden[j];
+        G->orden[j] = tmp;
+        return 0;
+    }
+    else
+        return 1;
+}
+/*
+char OrdenWelshPowell(Grafostv* G)
+{
+    u32 *vert_degree;
+    vert_degree = G->grados;
+    qsort(G->orden, G->n, sizeof(G->orden[0]), compare_vertices);
+
+    return 0;
+}*/
+/*
+char RMBCnormal(Grafostv* G)
+{
+
+}*/

@@ -14,15 +14,6 @@ u32 binarySearch(u32* arr, u32 l, u32 r, u32 x)
     return 0; 
 }
 
-int compare ( const void *pa, const void *pb ) {
-    const u32 *a = *(const u32 **)pa;
-    const u32 *b = *(const u32 **)pb;
-    if(a[0] == b[0])
-        return a[1] - b[1];
-    else
-        return a[0] - b[0];
-}
-
 void copiarAVertice(u32* vertices, u32** vecinos1, u32* grados, u32* indEnVecinos, u32 m)
 {
     u32** aux = vecinos1;
@@ -92,7 +83,7 @@ Grafostv* ConstruccionDelGrafo()
     int c = 0; //auxiliar char needed for fgetc function
     char prev = 'a';
     char edge[50] = {0};
-  
+
     while(true) //module to ignore comments
     {
         prev = (char)c;
@@ -150,25 +141,48 @@ int main()
     //{
     //  printf("%u ------ %u\n",ptr->vecinos[0][j], ptr->vecinos[1][j] );
     //}
-    /* 
+     
      u32 n = G->n;
+     /*
+     //qsort(G->orden, n, sizeof(ParGradoOrden), comGrado);
      for (u32 i = 0; i < n; ++i)
      {
         //printf("los vertices son:%u\n", G->vertices[i]);
-        printf("%u ------ %u \n", G->vecinos[i][0],G->vecinos[i][1]);
+        //printf("%u ------ %u \n", G->vecinos[i][0],G->vecinos[i][1]);
         //printf("el indEnVecino es:%u ", G->indEnVecinos[i]);
         //printf("el color del vertice %u es:%u  \n", G->vertices[i], G->color[i]);
+        //printf("Orden natural (Vertices ordenados):  %c\n", OrdenNatural(G));
+        //printf("los vertices son %u\n: ", G->grados[G->orden[n]-1]);
      }
      */
 //G->vecinos[G->indEnVecinos[0]][1]
+    printf("\n\n---Greedy---  Número máximo de colores con Greedy: %u\n",G->max);
+    OrdenNatural(G);
+    printf("---Orden Natural---   Número máximo con Orden Natural: %u\n", Greedy(G));
+    //u32 min = 999999999;
+    //u32 x = 0;
+    /*
+    for (int i = 0; i < 2; ++i)
+    {
+        for (int j = i; j < 100; j+=2)
+        {
+           SwitchVertices(G,j+1,j);
+           x =  Greedy(G);
+           if (x < min)
+               min = x;
+        }
+    }
+    */
+    //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
 
-    printf("Número máximo de colores con Greedy: %u\n",G->max);
-    printf("\n\nEl número de vertices es %u\n", NumeroDeVertices(G));
+
+    printf("El número de vertices es %u\n", NumeroDeVertices(G));
     printf("El núumero de lados es %u\n", NumeroDeLados(G));
     printf("El nombre del vértice es 4 es %u\n", NombreDelVertice(G, 4));
     printf("El color del vértice 8 es %u\n", ColorDelVertice(G, 8));
     printf("El grado del vértice 8 es %u\n", GradoDelVertice(G,8));
     printf("El color del segundo vecino del vértice 2 es %u\n", ColorJotaesimoVecino(G,1,1));
     printf("El nombre del segundo vecino del vértice 2 es %u\n", NombreJotaesimoVecino(G, 1, 1));
+    DestruccionDelGrafo(G);
   return 0;
 }
