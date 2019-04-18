@@ -63,7 +63,8 @@ u32 Greedy(Grafostv* G)
     u32** aux = G->vecinos; 
     u32 max_color = 0;
     u32 nVer = G->n;
-    u32* color_vecinos = G->color = (u32*)malloc(sizeof(u32) * nVer);
+    u32* color_vecinos = (u32*)malloc(sizeof(u32) * nVer);
+    memset(color_vecinos,0,nVer*sizeof(u32));
     u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
     G->color[indice] = 0;
     G->visitados[indice] = 1;
@@ -71,6 +72,7 @@ u32 Greedy(Grafostv* G)
     u32 reset = 0; 
   for (u32 i = 1; i < nVer; ++i)
   {
+  	memset(color_vecinos,0,(reset+1)*sizeof(u32));
     indice = binarySearch(G->vertices,0,nVer-1,G->orden[i]);
     G->visitados[indice] = 1;
     u32 color = 0;
@@ -88,14 +90,14 @@ u32 Greedy(Grafostv* G)
     {
         if(!color_vecinos[i])
         {
-            color = i;
+            color = i; 
             break;
         }
     }
     G->color[indice] = color;
     if(color > max_color) max_color = color;
-    if(reset+1 > nVer) reset = nVer-1;
-    memset(color_vecinos,0,reset+1*sizeof(u32));
+    if(reset < color) reset = color;
+    if(reset == nVer) reset--;
   }
   free(color_vecinos);
   printf("terminé Greedy\n");
