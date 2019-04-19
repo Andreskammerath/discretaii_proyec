@@ -165,9 +165,9 @@ int main()
      }
      */
 //G->vecinos[G->indEnVecinos[0]][1]
-    printf("\n\n---Greedy---  Número máximo de colores con Greedy: %u\n",G->max);
-    OrdenNatural(G);
-    printf("---Orden Natural---   Número máximo con Orden Natural: %u\n", Greedy(G));
+    // printf("\n\n---Greedy---  Número máximo de colores con Greedy: %u\n",G->max);
+    // OrdenNatural(G);
+    // printf("---Orden Natural---   Número máximo con Orden Natural: %u\n", Greedy(G));
     //u32 min = 999999999;
     //u32 x = 0;
     /*
@@ -183,8 +183,15 @@ int main()
     }
     */
     //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
-
-
+    for (u32 i = 0; i < 2*G->m; ++i)
+    {
+      printf("%u ----- %u \n",G->vecinos[i][0],G->vecinos[i][1]);
+    }
+    printf("%u \n\n",NombreJotaesimoVecino(G,1,1));
+    for (u32 i = 0; i < G->n; ++i)
+    {
+      printf("vertice:%u ------- color:%u \n",G->orden[i],G->color[i]);
+    }
     /*printf("El número de vertices es %u\n", NumeroDeVertices(G));
     printf("El núumero de lados es %u\n", NumeroDeLados(G));
     printf("El nombre del vértice es 4 es %u\n", NombreDelVertice(G, 4));

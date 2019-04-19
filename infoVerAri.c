@@ -32,7 +32,7 @@ int comOrdenNat (const void * a, const void * b) //what is it returning?
     }
 }*/
 
-void DestruccionDelGrafo (Grafostv* G)
+void DestruccionDelGrafo (Grafostv* G)//anda perfecto
 {
     u32 m = G->m;
     for (u32 i = 0; i < 2*m; i++) {
@@ -48,12 +48,12 @@ void DestruccionDelGrafo (Grafostv* G)
     free(G);
     G = NULL;
 }
-u32 NumeroDeVertices (Grafostv* G)
+u32 NumeroDeVertices (Grafostv* G)//anda bien
 {
     return G->n;
 }
 
-u32 NumeroDeLados (Grafostv* G)
+u32 NumeroDeLados (Grafostv* G)//anda bien
 {
     return G->m;
 }
@@ -62,38 +62,51 @@ u32 NumeroDeLados (Grafostv* G)
     return G->color; //DUDAAAAAAAAAAAA
 }
 */
-u32 NombreDelVertice (Grafostv* G, u32 i)
+u32 NombreDelVertice (Grafostv* G, u32 i)//anda perfecto
 {
-    return G->vertices[i];
+    return G->orden[i];
 }
 
-u32 ColorDelVertice (Grafostv* G, u32 i)
+u32 ColorDelVertice (Grafostv* G, u32 i)//anda perfecto
 {
     if (i >= NumeroDeVertices(G))
-        return 4294967295; //2^32-1
-    else
-        return G->color[i];
+    {
+        return 4294967295;
+    }
+    u32 indice = binarySearch(G->vertices,0,(G->n)-1,G->orden[i]);
+    return G->color[indice];
 }
 
 u32 GradoDelVertice (Grafostv* G, u32 i)
 {
-    if (i >= NumeroDeVertices(G))
-        return 4294967295; //2^32-1
-    else 
-        return G->grados[i];
+if (i >= NumeroDeVertices(G))
+    {
+        return 4294967295;
+    }
+    u32 indice = binarySearch(G->vertices,0,(G->n)-1,G->orden[i]);
+    return G->grados[indice];
 }
 
 u32 ColorJotaesimoVecino(Grafostv* G, u32 i,u32 j) //vecino num j
 {
     if (i >= NumeroDeVertices(G) || j >= GradoDelVertice(G,i))
+    {
         return 4294967295; //2^32-1
-    else
-        return ColorDelVertice(G, G->vecinos[G->indEnVecinos[i]+j][1]);
+    }
+    u32 indice = binarySearch(G->vertices,0,(G->n)-1,G->orden[i]);
+    u32 indice2 = binarySearch(G->vertices,0,(G->n)-1,G->vecinos[G->indEnVecinos[indice]+j][1]);
+    return ColorDelVertice(G, indice2);
 }
 
 u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j)
 {
-    return NombreDelVertice(G, G->vecinos[G->indEnVecinos[i]+j][1]);
+    if (i >= NumeroDeVertices(G) || j >= GradoDelVertice(G,i))
+    {
+        return 4294967295; //2^32-1
+    }
+    u32 indice = binarySearch(G->vertices,0,(G->n)-1,G->orden[i]);
+    u32 indice2 = binarySearch(G->vertices,0,(G->n)-1,G->vecinos[G->indEnVecinos[indice]+j][1]);
+    return NombreDelVertice(G, indice2);
 }
 
 char OrdenNatural(Grafostv* G)

@@ -36,7 +36,7 @@ u32 NumeroDeLados (Grafostv* G);
 
 //u32 NumeroDeColores (Grafostv* G);
 
-
+u32 binarySearch(u32* arr, u32 l, u32 r, u32 x);
 //Los nombres van a estar odenados de menor a mayor. 
 u32 NombreDelVertice (Grafostv* G, u32 i);
 
