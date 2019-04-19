@@ -23,8 +23,10 @@ typedef struct Grafost
 } Grafostv;
 
 int compare ( const void *pa, const void *pb );
+int comp_grados(const void *v1, const void *v2);
 
-//int comGrado (const void * a, const void * b);
+int compColoresRevierte(const void *v1, const void *v2);
+
 
 int comOrdenNat (const void * a, const void * b);
 

@@ -3,6 +3,92 @@
 #include <stdbool.h>
 #include "Rii.h"
 
+u32* vert_grados;
+u32* vert_color;
+// vector<int> adj[], int v, vector<bool>& visited, vector<int>& color
+// int isBipartite(Grafostv* G) 
+// {
+//     u32 nVer = G->n;
+//     u32* visitados = G->visitados;
+//     memset(visitados,0,nVer*sizeof(u32));
+//     u32* color = (u32*)malloc(sizeof(u32) * nVer);
+//     memset(color,0,nVer*sizeof(u32));
+//     u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
+//     G->visitados[indice] = 1;
+//     for (u32 i = 0; i < G->grados[indice]; ++i)
+//     {
+//         // if vertex u is not explored before 
+//         if (visited[G->vecinos[]] == false) { 
+  
+//             // mark present vertic as visited 
+//             visited[u] = true; 
+  
+//             // mark its color opposite to its parent 
+//             color[u] = !color[v]; 
+  
+//             // if the subtree rooted at vertex v is not bipartite 
+//             if (!isBipartite(adj, u, visited, color)) 
+//                 return false; 
+//         } 
+  
+//         // if two adjacent are colored with same color then 
+//         // the graph is not bipartite 
+//         else if (color[u] == color[v]) 
+//             return false; 
+//     } 
+//     return true; 
+// } 
+int comp_grados(const void *v1, const void *v2) {
+    u32 degree1 = vert_grados[*(const u32 *)v1 - 1];
+    u32 degree2 = vert_grados[*(const u32 *)v2 - 1];
+    if (degree1 > degree2)
+    {
+        return -1;
+    }
+    else if (degree1 < degree2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int compColoresRevierte(const void *v1, const void *v2) {
+    u32 color1 = vert_color[*(const u32 *)v1 - 1];
+    u32 color2 = vert_color[*(const u32 *)v2 - 1];
+    if (color1 > color2)
+    {
+        return -1;
+    }
+    else if (color1 < color2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int compColoresNormal(const void *v1, const void *v2) {
+    u32 color1 = vert_color[*(const u32 *)v1 - 1];
+    u32 color2 = vert_color[*(const u32 *)v2 - 1];
+    if (color1 < color2)
+    {
+        return -1;
+    }
+    else if (color1 > color2)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 int compare ( const void *pa, const void *pb ) {
     const u32 *a = *(const u32 **)pa;
     const u32 *b = *(const u32 **)pb;
@@ -18,19 +104,6 @@ int comOrdenNat (const void * a, const void * b) //what is it returning?
    u32 val2 = *(u32*)b;
    return ( val1 - val2 ); 
 }
-
-/*int compare_vertices(const void *v1, const void *v2) {
-    u32 *vert_degree;
-    u32 degree1 = vert_degree[*(const u32 *)v1 - 1];
-    u32 degree2 = vert_degree[*(const u32 *)v2 - 1];
-    if (degree1 > degree2) {
-        return -1;
-    } else if (degree1 < degree2) {
-        return 1;
-    } else {
-        return 0;
-    }
-}*/
 
 void DestruccionDelGrafo (Grafostv* G)//anda perfecto
 {
@@ -114,6 +187,14 @@ char OrdenNatural(Grafostv* G)
     qsort(G->orden, G->n, sizeof(u32), comOrdenNat);
     return 0;
 }
+
+char OrdenWelshPowell(Grafostv* G)
+{
+    vert_grados = G->grados;
+    qsort(G->orden, G->n, sizeof(u32), comp_grados);
+    return 0;
+}
+
 char SwitchVertices(Grafostv* G, u32 i, u32 j)
 {
     if (i < NumeroDeVertices(G) || j < NumeroDeVertices(G))
@@ -126,17 +207,18 @@ char SwitchVertices(Grafostv* G, u32 i, u32 j)
     else
         return 1;
 }
-/*
-char OrdenWelshPowell(Grafostv* G)
-{
-    u32 *vert_degree;
-    vert_degree = G->grados;
-    qsort(G->orden, G->n, sizeof(G->orden[0]), compare_vertices);
 
+
+char RMBCrevierte(Grafostv* G)
+{
+    vert_color = G->color;
+    qsort(G->orden, G->n, sizeof(u32), compColoresRevierte);
     return 0;
-}*/
-/*
+}
+
 char RMBCnormal(Grafostv* G)
 {
-
-}*/
+    vert_color = G->color;
+    qsort(G->orden, G->n, sizeof(u32), compColoresNormal);
+    return 0;
+}

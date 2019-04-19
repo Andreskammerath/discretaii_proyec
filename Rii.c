@@ -78,7 +78,6 @@ u32 Greedy(Grafostv* G)
         if(reset == nVer) reset--;
     }
     free(color_vecinos);
-    printf("terminé Greedy\n");
     return max_color + 1;
 }
 
@@ -170,28 +169,21 @@ int main()
     // printf("---Orden Natural---   Número máximo con Orden Natural: %u\n", Greedy(G));
     //u32 min = 999999999;
     //u32 x = 0;
-    /*
-    for (int i = 0; i < 2; ++i)
-    {
-        for (int j = i; j < 100; j+=2)
-        {
-           SwitchVertices(G,j+1,j);
-           x =  Greedy(G);
-           if (x < min)
-               min = x;
-        }
-    }
-    */
+    // RMBCnormal(G);
+    // for (int i = 0; i < G->n; ++i)
+    // {
+    //     printf("vertice:%u  color:%u\n",G->orden[i],G->color[binarySearch(G->vertices,0,(G->n)-1,G->orden[i])]);        
+    // }    
     //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
-    for (u32 i = 0; i < 2*G->m; ++i)
-    {
-      printf("%u ----- %u \n",G->vecinos[i][0],G->vecinos[i][1]);
-    }
-    printf("%u \n\n",NombreJotaesimoVecino(G,1,1));
-    for (u32 i = 0; i < G->n; ++i)
-    {
-      printf("vertice:%u ------- color:%u \n",G->orden[i],G->color[i]);
-    }
+    // for (u32 i = 0; i < 2*G->m; ++i)
+    // {
+    //   printf("%u ----- %u \n",G->vecinos[i][0],G->vecinos[i][1]);
+    // }
+    // printf("%u \n\n",NombreJotaesimoVecino(G,1,1));
+    // for (u32 i = 0; i < G->n; ++i)
+    // {
+    //   printf("vertice:%u ------- color:%u \n",G->orden[i],G->color[i]);
+    // }
     /*printf("El número de vertices es %u\n", NumeroDeVertices(G));
     printf("El núumero de lados es %u\n", NumeroDeLados(G));
     printf("El nombre del vértice es 4 es %u\n", NombreDelVertice(G, 4));
