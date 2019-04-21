@@ -20,3 +20,11 @@ clean:
 
 valgrind: $(TARGET)
 	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/300MIL.txt
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/bipartito/bipartito6.txt
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/bipartito/bipartito6mil
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/5millones.txt
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/bipartito/bipartitochoto.txt
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/queen13.txt
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/1500colores.txt
+	valgrind --leak-check=full --show-reachable=yes ./exe < test_grafos/school1.txt
+

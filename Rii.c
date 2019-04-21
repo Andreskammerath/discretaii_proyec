@@ -128,6 +128,14 @@ Grafostv* ConstruccionDelGrafo()
             free(G->color);
             free(G->orden);
             free(G->grados);
+            for (u32 i = 0; i < 2*m; i++) 
+            {
+                free (G->vecinos[i]);
+            }
+            free(G->vecinos);
+            free(G->vertices);
+            free(G->visitados);
+            free(G->indEnVecinos);
             return NULL;
         }
             G->vecinos[i][0] = v;
@@ -184,10 +192,10 @@ int main()
     //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
     // for (u32 i = 0; i < 2*G->m; ++i)
     // {
-      printf("Greedy:%u %u \n",G->max,Bipartito(G));
+      printf("Greedy:%u %u\n",G->max,Bipartito(G));
     // }
     // printf("%u \n\n",NombreJotaesimoVecino(G,1,1));
-    // for (u32 i = 0; i < G->n; ++i)
+    // for (u32 i = 0; i < G->n; ++i)v
     // {
     //   printf("vertice:%u ------- color:%u \n",G->orden[i],G->color[i]);
     // }
@@ -198,6 +206,6 @@ int main()
     printf("El grado del vértice 8 es %u\n", GradoDelVertice(G,8));
     printf("El color del segundo vecino del vértice 2 es %u\n", ColorJotaesimoVecino(G,1,1));
     printf("El nombre del segundo vecino del vértice 2 es %u\n", NombreJotaesimoVecino(G, 1, 1));*/
-    // DestruccionDelGrafo(G);
+    DestruccionDelGrafo(G);
   return 0;
 }

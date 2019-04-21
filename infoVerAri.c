@@ -190,10 +190,12 @@ char RMBCnormal(Grafostv* G)
     return 0;
 }
 
-void init(Queue *q) {
+Queue* init_queue() {
+    Queue* q = (Queue*)malloc(sizeof(Queue));
     q->front = NULL;
     q->last = NULL;
     q->size = 0;
+    return q;
 }
  
 int front(Queue *q) {
@@ -205,7 +207,12 @@ void pop(Queue *q) {
     {
         q->size--;   
         struct Node *tmp = q->front;
-        q->front = q->front->next;
+        if(q->size)q->front = q->front->next;
+        else
+        {
+            q->front = NULL;
+            q->last = NULL;
+        }
         free(tmp);
     }
 
@@ -234,27 +241,26 @@ int Bipartito(Grafostv* G)
 {
     u32* visitados = G->visitados;
     u32** aux = G->vecinos;
-    Queue* hijos = (Queue*)malloc(sizeof(Queue));
-    init(hijos);
+    Queue* hijos = init_queue();
     push(hijos,G->vertices[0]);
     u32 nVer = G->n;
     u32* color_vertices = (u32*)malloc(sizeof(u32) * nVer);
+    u32* vert_encolados = (u32*)malloc(sizeof(u32) * nVer);
     memset(color_vertices,0,nVer*sizeof(u32));//arreglo auxiliar por si es Bi
     memset(visitados,0,nVer*sizeof(u32));
     u32* bip = (u32*)malloc(sizeof(u32) * 2);
     bip[0] = 0;
     bip[1] = 0;
     u32 indice2 = 0;
-    u32 i = 0;
-    while(not_empty(hijos) && i < 200)
+    while(not_empty(hijos))
     {
         u32 v = hijos->front->data;
         pop(hijos);
         u32 indice = binarySearch(G->vertices,0,nVer-1,v);
         visitados[indice] = 1;
-        for (u32 i = 0; i < G->grados[indice]; ++i)
+        for (u32 j = 0; j < G->grados[indice]; ++j)
         {
-            indice2 = binarySearch(G->vertices,0,nVer-1,aux[G->indEnVecinos[indice]+i][1]);
+            indice2 = binarySearch(G->vertices,0,nVer-1,aux[G->indEnVecinos[indice]+j][1]);
             if(G->visitados[indice2])
             {
                 bip[color_vertices[indice2]] = 1;
@@ -272,14 +278,18 @@ int Bipartito(Grafostv* G)
             }
             else
             {
-                push(hijos, G->vertices[indice2]);
+                if(!vert_encolados[indice2])
+                {
+                    push(hijos, G->vertices[indice2]);
+                    vert_encolados[indice2] = 1;
+                }
             }
         }
-        for (int i = 0; i < 2; ++i)
+        for (int j = 0; j < 2; ++j)
         {
-            if(!bip[i])
+            if(!bip[j])
             {
-                color_vertices[indice] = i;
+                color_vertices[indice] = j;
             }
         }
         memset(bip,0,2*sizeof(u32));
@@ -288,17 +298,6 @@ int Bipartito(Grafostv* G)
     memcpy(G->color,color_vertices,nVer*sizeof(u32));
     free(color_vertices);
     free(bip);
+    free(vert_encolados);
     return 1;
 }
-
-/* 
-// Driver code.
-int main(void) {
-    Queue q;
-    init(&q);
-    push(&q, 1);
-    push(&q, 2);
-    printf("%d\n", front(&q));
-    pop(&q);
-    printf("%d\n", front(&q));
-}*/
