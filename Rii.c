@@ -95,18 +95,23 @@ Grafostv* ConstruccionDelGrafo()
     u32 m = 0; //number of edges
     u32 v = 0; //vertex name
     u32 w = 0; // vertex name
-    int c = 0; //auxiliar char needed for fgetc function
     char prev = 'a';
-    char edge[50] = {0};
+    char t;
+    char s[30];
 
-    while(true) //module to ignore comments
+    // Saltear comentarios
+    while (scanf ("%c", &t) != EOF && t == 'c')
+        while (scanf ("%c", &t) != EOF && t != '\n');
+
+    // Scan de línea p
+    if (t == 'p') 
     {
-        prev = (char)c;
-        c = fgetc(stdin);
-        if((char)c == 'p' && (prev == '\n' || prev == '\r') ) break;
-    }
-    if (scanf("%s" "%u" "%u", edge, &n, &m))
-        printf("Vertice: %u  Arista %u\n", n, m);
+        if (scanf (" %s %u %u\n", s, &n, &m) == 3)
+        printf ("Vertices = %u, Aristas= %u\n", n, m);
+    } else 
+        {
+            return NULL;
+        }
 
     G->m = m;
     G->n = n;

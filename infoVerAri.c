@@ -65,13 +65,12 @@ int compare ( const void *pa, const void *pb ) {
         return a[0] >= b[0] ? 1 : -1;
 }
 
-int comOrdenNat (const void * a, const void * b) //what is it returning?
+int comOrdenNat (const void * a, const void * b)
 {
-   u32 val1 = *(u32*)a;
-   u32 val2 = *(u32*)b;
-   return ( val1 - val2 ); 
+    u32 val1 = *(u32*)a;
+    u32 val2 = *(u32*)b;
+    return val1 > val2 ? 1 : -1;
 }
-
 void DestruccionDelGrafo (Grafostv* G)//anda perfecto
 {
     u32 m = G->m;
@@ -98,10 +97,11 @@ u32 NumeroDeLados (Grafostv* G)//anda bien
     return G->m;
 }
 
-/*u32 NumeroDeColores (Grafostv* G){
-    return G->color; //DUDAAAAAAAAAAAA
+u32 NumeroDeColores (Grafostv* G)
+{
+    return G->max;
 }
-*/
+
 u32 NombreDelVertice (Grafostv* G, u32 i)//anda perfecto
 {
     return G->orden[i];

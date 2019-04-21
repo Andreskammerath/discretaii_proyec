@@ -35,10 +35,10 @@ typedef struct Queue {
 
 
 int compare ( const void *pa, const void *pb );
+
 int comp_grados(const void *v1, const void *v2);
 
 int compColoresRevierte(const void *v1, const void *v2);
-
 
 int comOrdenNat (const void * a, const void * b);
 
@@ -48,10 +48,10 @@ u32 NumeroDeVertices (Grafostv* G);
 
 u32 NumeroDeLados (Grafostv* G);
 
-//u32 NumeroDeColores (Grafostv* G);
+u32 NumeroDeColores (Grafostv* G);
 
 u32 binarySearch(u32* arr, u32 l, u32 r, u32 x);
-//Los nombres van a estar odenados de menor a mayor. 
+
 u32 NombreDelVertice (Grafostv* G, u32 i);
 
 u32 ColorDelVertice (Grafostv* G, u32 i);
