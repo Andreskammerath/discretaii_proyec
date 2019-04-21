@@ -5,39 +5,6 @@
 
 u32* vert_grados;
 u32* vert_color;
-// vector<int> adj[], int v, vector<bool>& visited, vector<int>& color
-// int isBipartite(Grafostv* G) 
-// {
-//     u32 nVer = G->n;
-//     u32* visitados = G->visitados;
-//     memset(visitados,0,nVer*sizeof(u32));
-//     u32* color = (u32*)malloc(sizeof(u32) * nVer);
-//     memset(color,0,nVer*sizeof(u32));
-//     u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
-//     G->visitados[indice] = 1;
-//     for (u32 i = 0; i < G->grados[indice]; ++i)
-//     {
-//         // if vertex u is not explored before 
-//         if (visited[G->vecinos[]] == false) { 
-  
-//             // mark present vertic as visited 
-//             visited[u] = true; 
-  
-//             // mark its color opposite to its parent 
-//             color[u] = !color[v]; 
-  
-//             // if the subtree rooted at vertex v is not bipartite 
-//             if (!isBipartite(adj, u, visited, color)) 
-//                 return false; 
-//         } 
-  
-//         // if two adjacent are colored with same color then 
-//         // the graph is not bipartite 
-//         else if (color[u] == color[v]) 
-//             return false; 
-//     } 
-//     return true; 
-// } 
 int comp_grados(const void *v1, const void *v2) {
     u32 degree1 = vert_grados[*(const u32 *)v1 - 1];
     u32 degree2 = vert_grados[*(const u32 *)v2 - 1];
@@ -93,9 +60,9 @@ int compare ( const void *pa, const void *pb ) {
     const u32 *a = *(const u32 **)pa;
     const u32 *b = *(const u32 **)pb;
     if(a[0] == b[0])
-        return a[1] - b[1];
+        return a[1] >= b[1] ? 1 : -1;
     else
-        return a[0] - b[0];
+        return a[0] >= b[0] ? 1 : -1;
 }
 
 int comOrdenNat (const void * a, const void * b) //what is it returning?
@@ -222,3 +189,116 @@ char RMBCnormal(Grafostv* G)
     qsort(G->orden, G->n, sizeof(u32), compColoresNormal);
     return 0;
 }
+
+void init(Queue *q) {
+    q->front = NULL;
+    q->last = NULL;
+    q->size = 0;
+}
+ 
+int front(Queue *q) {
+    return q->front->data;
+}
+ 
+void pop(Queue *q) {
+    if(q->size)
+    {
+        q->size--;   
+        struct Node *tmp = q->front;
+        q->front = q->front->next;
+        free(tmp);
+    }
+
+}
+u32 not_empty(Queue* q)
+{
+    return q->size;
+}
+void push(Queue *q, u32 data) {
+    q->size++;
+ 
+    if (q->front == NULL) {
+        q->front = (struct Node *) malloc(sizeof(struct Node));
+        q->front->data = data;
+        q->front->next = NULL;
+        q->last = q->front;
+    } else {
+        q->last->next = (struct Node *) malloc(sizeof(struct Node));
+        q->last->next->data = data;
+        q->last->next->next = NULL;
+        q->last = q->last->next;
+    }
+}
+
+int Bipartito(Grafostv* G)
+{
+    u32* visitados = G->visitados;
+    u32** aux = G->vecinos;
+    Queue* hijos = (Queue*)malloc(sizeof(Queue));
+    init(hijos);
+    push(hijos,G->vertices[0]);
+    u32 nVer = G->n;
+    u32* color_vertices = (u32*)malloc(sizeof(u32) * nVer);
+    memset(color_vertices,0,nVer*sizeof(u32));//arreglo auxiliar por si es Bi
+    memset(visitados,0,nVer*sizeof(u32));
+    u32* bip = (u32*)malloc(sizeof(u32) * 2);
+    bip[0] = 0;
+    bip[1] = 0;
+    u32 indice2 = 0;
+    u32 i = 0;
+    while(not_empty(hijos) && i < 200)
+    {
+        u32 v = hijos->front->data;
+        pop(hijos);
+        u32 indice = binarySearch(G->vertices,0,nVer-1,v);
+        visitados[indice] = 1;
+        for (u32 i = 0; i < G->grados[indice]; ++i)
+        {
+            indice2 = binarySearch(G->vertices,0,nVer-1,aux[G->indEnVecinos[indice]+i][1]);
+            if(G->visitados[indice2])
+            {
+                bip[color_vertices[indice2]] = 1;
+                if(bip[0] && bip[1])
+                {
+                    while(not_empty(hijos))
+                    {
+                        pop(hijos);
+                    }
+                    free(hijos);
+                    free(color_vertices);
+                    free(bip);
+                    return 0;
+                }
+            }
+            else
+            {
+                push(hijos, G->vertices[indice2]);
+            }
+        }
+        for (int i = 0; i < 2; ++i)
+        {
+            if(!bip[i])
+            {
+                color_vertices[indice] = i;
+            }
+        }
+        memset(bip,0,2*sizeof(u32));
+    }
+    free(hijos);
+    memcpy(G->color,color_vertices,nVer*sizeof(u32));
+    free(color_vertices);
+    free(bip);
+    return 1;
+}
+
+/* 
+// Driver code.
+int main(void) {
+    Queue q;
+    init(&q);
+    push(&q, 1);
+    push(&q, 2);
+    printf("%d\n", front(&q));
+    pop(&q);
+    printf("%d\n", front(&q));
+}*/

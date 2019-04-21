@@ -14,30 +14,37 @@ u32 binarySearch(u32* arr, u32 l, u32 r, u32 x)
     return 0; 
 }
 
-void copiarAVertice(u32* vertices, u32** vecinos1, u32* grados, u32* indEnVecinos, u32 m)
+void copiarAVertice(u32* vertices, u32** vecinos1, u32* grados, u32* indEnVecinos, u32 m, u32 n)
 {
     u32** aux = vecinos1;
     u32 j = 0;
     u32 grado = 0;
+    u32 cont = 1;
     for (u32 i = 0; i < m; ++i)
     {
         if(aux[i][0] == vertices[j])
-        grado++;
-    else
-    {
-        grados[j] = grado;
-        ++j;
-        indEnVecinos[j] = i;
-        vertices[j] = aux[i][0];
-        grado = 1;
-    }
-}
+        {
+            grado++;
+        }
+        else
+        {
+            grados[j] = grado;
+            ++j;
+            indEnVecinos[j] = i;
+            cont++;
+            vertices[j] = aux[i][0];
+            grado = 1;
+        }
+    }  
     grados[j] = grado;
-    printf("terminé copiarAVertice\n");
+    if (cont < n) printf("es no conexo\n");
+    if (cont > n) printf("TENES MAS VERTICES\n");
+
 }
 
 u32 Greedy(Grafostv* G)
 {
+    printf("entré a Greedy\n");
     u32** aux = G->vecinos; 
     u32 max_color = 0;
     u32 nVer = G->n;
@@ -52,7 +59,7 @@ u32 Greedy(Grafostv* G)
     {
         memset(color_vecinos,0,(reset+1)*sizeof(u32));
         indice = binarySearch(G->vertices,0,nVer-1,G->orden[i]);
-        G->visitados[indice] = 1;
+            G->visitados[indice] = 1;
         u32 color = 0;
         reset = 0;
         for (u32 i = 0; i < G->grados[indice]; ++i)
@@ -131,11 +138,11 @@ Grafostv* ConstruccionDelGrafo()
     qsort(G->vecinos, 2*m, 2*sizeof(u32), compare);
     printf("terminé el qsort\n");
     G->vertices[0] = G->vecinos[0][0];
-    copiarAVertice(G->vertices,G->vecinos,G->grados, G->indEnVecinos, 2*m);
+    copiarAVertice(G->vertices,G->vecinos,G->grados, G->indEnVecinos, 2*m,n);
     memset(G->visitados,0,n*sizeof(u32));
-    memcpy(G->orden,G->vertices,n*sizeof(u32)); 
+    memcpy(G->orden,G->vertices,n*sizeof(u32));
     G->max = Greedy(G);
-    printf("terminé Greedy\n");
+    // printf("terminé Greedy\n");
     return G;
 
 }
@@ -177,7 +184,7 @@ int main()
     //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
     // for (u32 i = 0; i < 2*G->m; ++i)
     // {
-    //   printf("%u ----- %u \n",G->vecinos[i][0],G->vecinos[i][1]);
+      printf("Greedy:%u %u \n",G->max,Bipartito(G));
     // }
     // printf("%u \n\n",NombreJotaesimoVecino(G,1,1));
     // for (u32 i = 0; i < G->n; ++i)
@@ -191,6 +198,6 @@ int main()
     printf("El grado del vértice 8 es %u\n", GradoDelVertice(G,8));
     printf("El color del segundo vecino del vértice 2 es %u\n", ColorJotaesimoVecino(G,1,1));
     printf("El nombre del segundo vecino del vértice 2 es %u\n", NombreJotaesimoVecino(G, 1, 1));*/
-    DestruccionDelGrafo(G);
+    // DestruccionDelGrafo(G);
   return 0;
 }

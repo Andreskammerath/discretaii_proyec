@@ -22,6 +22,18 @@ typedef struct Grafost
 	u32* indEnVecinos;
 } Grafostv;
 
+struct Node{
+	int data;
+	struct Node *next;
+};
+ 
+typedef struct Queue {
+	struct Node *front;
+	struct Node *last;
+	unsigned int size;
+} Queue;
+
+
 int compare ( const void *pa, const void *pb );
 int comp_grados(const void *v1, const void *v2);
 
@@ -55,3 +67,15 @@ char OrdenWelshPowell(Grafostv* G);
 char OrdenNatural(Grafostv* G);
 
 char SwitchVertices(Grafostv* G,u32 i,u32 j);
+
+void init(Queue *q);
+
+int front(Queue *q);
+
+void pop(Queue *q);
+
+u32 empty(Queue* q);
+
+void push(Queue *q, u32 data);
+
+int Bipartito(Grafostv* G);
