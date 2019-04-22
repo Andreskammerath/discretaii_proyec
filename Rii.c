@@ -48,6 +48,8 @@ u32 Greedy(Grafostv* G)
     u32** aux = G->vecinos; 
     u32 max_color = 0;
     u32 nVer = G->n;
+    memset(G->color,0,nVer*sizeof(u32));
+    memset(G->visitados,0,nVer*sizeof(u32));
     u32* color_vecinos = (u32*)malloc(sizeof(u32) * nVer);
     memset(color_vecinos,0,nVer*sizeof(u32));
     u32 indice = binarySearch(G->vertices,0,nVer-1,G->orden[0]);
@@ -59,7 +61,7 @@ u32 Greedy(Grafostv* G)
     {
         memset(color_vecinos,0,(reset+1)*sizeof(u32));
         indice = binarySearch(G->vertices,0,nVer-1,G->orden[i]);
-            G->visitados[indice] = 1;
+        G->visitados[indice] = 1;
         u32 color = 0;
         reset = 0;
         for (u32 i = 0; i < G->grados[indice]; ++i)
@@ -95,23 +97,18 @@ Grafostv* ConstruccionDelGrafo()
     u32 m = 0; //number of edges
     u32 v = 0; //vertex name
     u32 w = 0; // vertex name
+    int c = 0; //auxiliar char needed for fgetc function
     char prev = 'a';
-    char t;
-    char s[30];
+    char edge[50] = {0};
 
-    // Saltear comentarios
-    while (scanf ("%c", &t) != EOF && t == 'c')
-        while (scanf ("%c", &t) != EOF && t != '\n');
-
-    // Scan de línea p
-    if (t == 'p') 
+    while(true) //module to ignore comments
     {
-        if (scanf (" %s %u %u\n", s, &n, &m) == 3)
-        printf ("Vertices = %u, Aristas= %u\n", n, m);
-    } else 
-        {
-            return NULL;
-        }
+        prev = (char)c;
+        c = fgetc(stdin);
+        if((char)c == 'p' && (prev == '\n' || prev == '\r') ) break;
+    }
+    if (scanf("%s" "%u" "%u", edge, &n, &m))
+        printf("Verti  ce: %u  Arista %u\n", n, m);
 
     G->m = m;
     G->n = n;
@@ -163,6 +160,7 @@ int main()
 {
     // begin of create graph
     Grafostv* G = ConstruccionDelGrafo();
+    Grafostv* G2 = CopiarGrafo(G);
     //u32 color = Greedy(ptr);
     //u32 m = ptr->m;
     //for (int j = 0; j < 2*m; ++j)
@@ -197,7 +195,12 @@ int main()
     //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
     // for (u32 i = 0; i < 2*G->m; ++i)
     // {
-      printf("Greedy:%u %u\n",G->max,Bipartito(G));
+    RMBCrevierte(G2);
+    for (int i = 0; i < G->n; ++i)
+    {
+        printf("%u %u\n",G2->orden[i],G2->color[binarySearch(G->vertices,0,(G->n)-1,G2->orden[i])]);
+    }
+      printf("Greedy:%u %u\n",Greedy(G2),Bipartito(G2));
     // }
     // printf("%u \n\n",NombreJotaesimoVecino(G,1,1));
     // for (u32 i = 0; i < G->n; ++i)v

@@ -5,9 +5,13 @@
 
 u32* vert_grados;
 u32* vert_color;
+u32* vertices;
+u32 nr;
 int comp_grados(const void *v1, const void *v2) {
-    u32 degree1 = vert_grados[*(const u32 *)v1 - 1];
-    u32 degree2 = vert_grados[*(const u32 *)v2 - 1];
+    u32 degree1 = vert_grados[binarySearch(vertices,0,nr-1,*(const u32 *)v1)];
+    u32 degree2 = vert_grados[binarySearch(vertices,0,nr-1,*(const u32 *)v2)];
+    // printf("degreeuno: %u ", *(const u32 *)v1-1);
+    // printf("degreedos: %u\n", *(const u32 *)v2-1);
     if (degree1 > degree2)
     {
         return -1;
@@ -23,8 +27,8 @@ int comp_grados(const void *v1, const void *v2) {
 }
 
 int compColoresRevierte(const void *v1, const void *v2) {
-    u32 color1 = vert_color[*(const u32 *)v1 - 1];
-    u32 color2 = vert_color[*(const u32 *)v2 - 1];
+    u32 color1 = vert_color[binarySearch(vertices,0,nr-1,*(const u32 *)v1)];
+    u32 color2 = vert_color[binarySearch(vertices,0,nr-1,*(const u32 *)v2)];
     if (color1 > color2)
     {
         return -1;
@@ -40,8 +44,8 @@ int compColoresRevierte(const void *v1, const void *v2) {
 }
 
 int compColoresNormal(const void *v1, const void *v2) {
-    u32 color1 = vert_color[*(const u32 *)v1 - 1];
-    u32 color2 = vert_color[*(const u32 *)v2 - 1];
+    u32 color1 = vert_color[binarySearch(vertices,0,nr-1,*(const u32 *)v1)];
+    u32 color2 = vert_color[binarySearch(vertices,0,nr-1,*(const u32 *)v2)];
     if (color1 < color2)
     {
         return -1;
@@ -157,7 +161,9 @@ char OrdenNatural(Grafostv* G)
 
 char OrdenWelshPowell(Grafostv* G)
 {
+    nr = G->n;
     vert_grados = G->grados;
+    vertices = G->vertices;
     qsort(G->orden, G->n, sizeof(u32), comp_grados);
     return 0;
 }
@@ -178,14 +184,18 @@ char SwitchVertices(Grafostv* G, u32 i, u32 j)
 
 char RMBCrevierte(Grafostv* G)
 {
+    nr = G->n;
     vert_color = G->color;
+    vertices = G->vertices;
     qsort(G->orden, G->n, sizeof(u32), compColoresRevierte);
     return 0;
 }
 
 char RMBCnormal(Grafostv* G)
 {
+    nr = G->n;
     vert_color = G->color;
+    vertices = G->vertices;
     qsort(G->orden, G->n, sizeof(u32), compColoresNormal);
     return 0;
 }
@@ -300,4 +310,35 @@ int Bipartito(Grafostv* G)
     free(bip);
     free(vert_encolados);
     return 1;
+}
+
+Grafostv* CopiarGrafo(Grafostv* G)
+{
+    u32 n = G->n;
+    u32 m = G->m;
+    Grafostv* G2 = (Grafostv*)malloc(sizeof(Grafostv));
+    G2->m = m;
+    G2->n = n;
+    G2->color = (u32*)malloc(sizeof(u32) * n);
+    G2->orden = (u32*)malloc(sizeof(u32) * n);
+    G2->grados = (u32*)malloc(sizeof(u32) * n);
+    G2->indEnVecinos = (u32*)malloc(sizeof(u32) * n);
+    G2->vecinos = (u32**)malloc(sizeof(u32*) * 2*m);
+    G2->vertices = (u32*)malloc(sizeof(u32*) * n);
+    G2->visitados = (u32*)malloc(sizeof(u32*) * n);
+    for (u32 i = 0; i < 2*m; ++i)
+        G2->vecinos[i] = (u32*)malloc(sizeof(u32)*2);
+    memcpy(G2->color,G->color,n*sizeof(u32));
+    memcpy(G2->orden,G->orden,n*sizeof(u32));
+    memcpy(G2->grados,G->grados,n*sizeof(u32));
+    memcpy(G2->indEnVecinos,G->indEnVecinos,n*sizeof(u32));
+    memcpy(G2->vertices,G->vertices,n*sizeof(u32));
+    memcpy(G2->visitados,G->visitados,n*sizeof(u32));
+    for (u32 i = 0; i < 2 * G->m; ++i)
+    {
+        memcpy(G2->vecinos[i],G->vecinos[i],2*sizeof(u32));
+        // G2->vecinos[i][0] = G->vecinos[i][0];
+        // G2->vecinos[i][1] = G->vecinos[i][1];
+    }
+    return G2;
 }

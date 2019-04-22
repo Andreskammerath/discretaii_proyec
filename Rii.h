@@ -79,3 +79,9 @@ u32 empty(Queue* q);
 void push(Queue *q, u32 data);
 
 int Bipartito(Grafostv* G);
+
+Grafostv* CopiarGrafo(Grafostv* G);
+
+char RMBCrevierte(Grafostv* G);
+
+char RMBCnormal(Grafostv* G);
