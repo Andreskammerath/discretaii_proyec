@@ -8,7 +8,7 @@
 
 typedef unsigned int u32; 
 
-typedef struct Grafost
+typedef struct GrafoSt
 {
 	u32** vecinos;
 	u32* vertices;  // Posicion de los vertices
@@ -20,8 +20,10 @@ typedef struct Grafost
 	u32 n; // number of vertex
 	u32 max; // number of colors
 	u32* indEnVecinos;
-} Grafostv;
+	// u32* orden_indice;//order of vertex by index
+} GrafoSt;
 
+typedef GrafoSt* Grafo;
 struct Node{
 	int data;
 	struct Node *next;
@@ -42,31 +44,31 @@ int compColoresRevierte(const void *v1, const void *v2);
 
 int comOrdenNat (const void * a, const void * b);
 
-void DestruccionDelGrafo (Grafostv* G);
+void DestruccionDelGrafo (Grafo G);
 
-u32 NumeroDeVertices (Grafostv* G);
+u32 NumeroDeVertices (Grafo G);
 
-u32 NumeroDeLados (Grafostv* G);
+u32 NumeroDeLados (Grafo G);
 
-u32 NumeroDeColores (Grafostv* G);
+u32 NumeroDeColores (Grafo G);
 
 u32 binarySearch(u32* arr, u32 l, u32 r, u32 x);
 
-u32 NombreDelVertice (Grafostv* G, u32 i);
+u32 NombreDelVertice (Grafo G, u32 i);
 
-u32 ColorDelVertice (Grafostv* G, u32 i);
+u32 ColorDelVertice (Grafo G, u32 i);
 
-u32 GradoDelVertice (Grafostv* G, u32 i);
+u32 GradoDelVertice (Grafo G, u32 i);
 
-u32 ColorJotaesimoVecino(Grafostv * G, u32 i,u32 j);
+u32 ColorJotaesimoVecino(Grafo G, u32 i,u32 j);
 
-u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j);
+u32 NombreJotaesimoVecino(Grafo G, u32 i,u32 j);
 
-char OrdenWelshPowell(Grafostv* G);
+char OrdenWelshPowell(Grafo G);
 
-char OrdenNatural(Grafostv* G);
+char OrdenNatural(Grafo G);
 
-char SwitchVertices(Grafostv* G,u32 i,u32 j);
+char SwitchVertices(Grafo G,u32 i,u32 j);
 
 void init(Queue *q);
 
@@ -78,10 +80,10 @@ u32 empty(Queue* q);
 
 void push(Queue *q, u32 data);
 
-int Bipartito(Grafostv* G);
+int Bipartito(Grafo G);
 
-Grafostv* CopiarGrafo(Grafostv* G);
+Grafo CopiarGrafo(Grafo G);
 
-char RMBCrevierte(Grafostv* G);
+char RMBCrevierte(Grafo G);
 
-char RMBCnormal(Grafostv* G);
+char RMBCnormal(Grafo G);

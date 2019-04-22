@@ -42,7 +42,7 @@ void copiarAVertice(u32* vertices, u32** vecinos1, u32* grados, u32* indEnVecino
 
 }
 
-u32 Greedy(Grafostv* G)
+u32 Greedy(Grafo G)
 {
     printf("entré a Greedy\n");
     u32** aux = G->vecinos; 
@@ -90,9 +90,9 @@ u32 Greedy(Grafostv* G)
     return max_color + 1;
 }
 
-Grafostv* ConstruccionDelGrafo()
+Grafo ConstruccionDelGrafo()
 {
-    Grafostv* G = (Grafostv*)malloc(sizeof(Grafostv));
+    Grafo G = (Grafo)malloc(sizeof(GrafoSt));
     u32 n = 0; //number of vertexs
     u32 m = 0; //number of edges
     u32 v = 0; //vertex name
@@ -159,8 +159,8 @@ Grafostv* ConstruccionDelGrafo()
 int main()
 {
     // begin of create graph
-    Grafostv* G = ConstruccionDelGrafo();
-    Grafostv* G2 = CopiarGrafo(G);
+    Grafo G = ConstruccionDelGrafo();
+    Grafo G2 = CopiarGrafo(G);
     //u32 color = Greedy(ptr);
     //u32 m = ptr->m;
     //for (int j = 0; j < 2*m; ++j)
@@ -195,7 +195,7 @@ int main()
     //printf("---SwitchVertices---   Número máximo con SwitchVertices: %u\n", min);
     // for (u32 i = 0; i < 2*G->m; ++i)
     // {
-    RMBCrevierte(G2);
+    RMBCnormal(G2);
     for (int i = 0; i < G->n; ++i)
     {
         printf("%u %u\n",G2->orden[i],G2->color[binarySearch(G->vertices,0,(G->n)-1,G2->orden[i])]);

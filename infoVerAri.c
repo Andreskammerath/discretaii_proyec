@@ -75,7 +75,7 @@ int comOrdenNat (const void * a, const void * b)
     u32 val2 = *(u32*)b;
     return val1 > val2 ? 1 : -1;
 }
-void DestruccionDelGrafo (Grafostv* G)//anda perfecto
+void DestruccionDelGrafo (Grafo G)//anda perfecto
 {
     u32 m = G->m;
     for (u32 i = 0; i < 2*m; i++) {
@@ -91,27 +91,27 @@ void DestruccionDelGrafo (Grafostv* G)//anda perfecto
     free(G);
     G = NULL;
 }
-u32 NumeroDeVertices (Grafostv* G)//anda bien
+u32 NumeroDeVertices (Grafo G)//anda bien
 {
     return G->n;
 }
 
-u32 NumeroDeLados (Grafostv* G)//anda bien
+u32 NumeroDeLados (Grafo G)//anda bien
 {
     return G->m;
 }
 
-u32 NumeroDeColores (Grafostv* G)
+u32 NumeroDeColores (Grafo G)
 {
     return G->max;
 }
 
-u32 NombreDelVertice (Grafostv* G, u32 i)//anda perfecto
+u32 NombreDelVertice (Grafo G, u32 i)//anda perfecto
 {
     return G->orden[i];
 }
 
-u32 ColorDelVertice (Grafostv* G, u32 i)//anda perfecto
+u32 ColorDelVertice (Grafo G, u32 i)//anda perfecto
 {
     if (i >= NumeroDeVertices(G))
     {
@@ -121,7 +121,7 @@ u32 ColorDelVertice (Grafostv* G, u32 i)//anda perfecto
     return G->color[indice];
 }
 
-u32 GradoDelVertice (Grafostv* G, u32 i)
+u32 GradoDelVertice (Grafo G, u32 i)
 {
 if (i >= NumeroDeVertices(G))
     {
@@ -131,7 +131,7 @@ if (i >= NumeroDeVertices(G))
     return G->grados[indice];
 }
 
-u32 ColorJotaesimoVecino(Grafostv* G, u32 i,u32 j) //vecino num j
+u32 ColorJotaesimoVecino(Grafo G, u32 i,u32 j) //vecino num j
 {
     if (i >= NumeroDeVertices(G) || j >= GradoDelVertice(G,i))
     {
@@ -142,7 +142,7 @@ u32 ColorJotaesimoVecino(Grafostv* G, u32 i,u32 j) //vecino num j
     return ColorDelVertice(G, indice2);
 }
 
-u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j)
+u32 NombreJotaesimoVecino(Grafo G, u32 i,u32 j)
 {
     if (i >= NumeroDeVertices(G) || j >= GradoDelVertice(G,i))
     {
@@ -153,13 +153,13 @@ u32 NombreJotaesimoVecino(Grafostv* G, u32 i,u32 j)
     return NombreDelVertice(G, indice2);
 }
 
-char OrdenNatural(Grafostv* G)
+char OrdenNatural(Grafo G)
 {
     qsort(G->orden, G->n, sizeof(u32), comOrdenNat);
     return 0;
 }
 
-char OrdenWelshPowell(Grafostv* G)
+char OrdenWelshPowell(Grafo G)
 {
     nr = G->n;
     vert_grados = G->grados;
@@ -168,7 +168,7 @@ char OrdenWelshPowell(Grafostv* G)
     return 0;
 }
 
-char SwitchVertices(Grafostv* G, u32 i, u32 j)
+char SwitchVertices(Grafo G, u32 i, u32 j)
 {
     if (i < NumeroDeVertices(G) || j < NumeroDeVertices(G))
     {
@@ -182,7 +182,7 @@ char SwitchVertices(Grafostv* G, u32 i, u32 j)
 }
 
 
-char RMBCrevierte(Grafostv* G)
+char RMBCrevierte(Grafo G)
 {
     nr = G->n;
     vert_color = G->color;
@@ -191,7 +191,7 @@ char RMBCrevierte(Grafostv* G)
     return 0;
 }
 
-char RMBCnormal(Grafostv* G)
+char RMBCnormal(Grafo G)
 {
     nr = G->n;
     vert_color = G->color;
@@ -247,7 +247,7 @@ void push(Queue *q, u32 data) {
     }
 }
 
-int Bipartito(Grafostv* G)
+int Bipartito(Grafo G)
 {
     u32* visitados = G->visitados;
     u32** aux = G->vecinos;
@@ -312,11 +312,11 @@ int Bipartito(Grafostv* G)
     return 1;
 }
 
-Grafostv* CopiarGrafo(Grafostv* G)
+Grafo CopiarGrafo(Grafo G)
 {
     u32 n = G->n;
     u32 m = G->m;
-    Grafostv* G2 = (Grafostv*)malloc(sizeof(Grafostv));
+    Grafo G2 = (Grafo)malloc(sizeof(GrafoSt));
     G2->m = m;
     G2->n = n;
     G2->color = (u32*)malloc(sizeof(u32) * n);
